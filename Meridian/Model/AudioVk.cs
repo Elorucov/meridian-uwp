@@ -74,7 +74,7 @@ namespace Meridian.Model
         {
             Id = audio.Id.ToString();
             OwnerId = audio.OwnerId.ToString();
-            Title = audio.Title;
+            Title = String.IsNullOrEmpty(audio.Subtitle) ? audio.Title : $"{audio.Title} ({audio.Subtitle})";
             Artist = audio.Artist;
             Duration = audio.Duration;
             PlaylistId = audio.AlbumId;

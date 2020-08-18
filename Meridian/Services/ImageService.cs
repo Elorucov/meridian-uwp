@@ -43,16 +43,9 @@ namespace Meridian.Services
                 if (cachedImage != null)
                     return cachedImage;
 
-                var imageUri = await ResolveAlbumCoverUri(artist, title);
-                if (imageUri != null)
-                    cachedImage = await _cacheService.CacheImageFromUri(imageUri, key: imageKey, optimalImageWidth: optimalImageWidth);
-                else
-                {
-                    cachedImage = await GetArtistImage(artist, big: false, optimalImageWidth: optimalImageWidth);
-
-                    if (cachedImage == null)
-                        return DefaultTrackCover; //TODO dark theme support
-                }
+                cachedImage = await GetArtistImage(artist, big: false, optimalImageWidth: optimalImageWidth);
+                if (cachedImage == null)
+                    return DefaultTrackCover; //TODO dark theme support
 
                 return cachedImage;
             }
@@ -70,12 +63,6 @@ namespace Meridian.Services
             {
                 var imageKey = $"{artist}";
                 var cachedImage = await _cacheService.GetCachedImage(key: imageKey, optimalImageWidth: optimalImageWidth);
-                if (cachedImage == null)
-                {
-                    var imageUri = await ResolveArtistImageUri(artist, big: big);
-                    if (imageUri != null)
-                        cachedImage = await _cacheService.CacheImageFromUri(imageUri, key: imageKey, optimalImageWidth: optimalImageWidth);
-                }
 
                 return cachedImage;
             }
@@ -147,9 +134,7 @@ namespace Meridian.Services
                 {
                     using (imageStream)
                     {
-                        var resizeImageStream = await ResizeImageWithCrop(imageStream, 150, 150);
-
-                        AudioService.Instance.UpdateCover(RandomAccessStreamReference.CreateFromStream(resizeImageStream.AsRandomAccessStream()));
+                        AudioService.Instance.UpdateCover(await _cacheService.ConvertToRandomAccessStream(imageStream));
                     }
                 }
             }

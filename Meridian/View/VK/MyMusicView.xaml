@@ -175,72 +175,69 @@
                         </ListView>
                     </controls:LoadingIndicator>
 
-                    <toolkit:DropShadowPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" ShadowOpacity="0.2" OffsetY="3" BlurRadius="5"
-                                             x:Name="AlbumsPane" x:DeferLoadStrategy="Lazy" Visibility="Collapsed">
-                        <Grid Width="200" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
+                    <Grid Width="200" x:Name="AlbumsPane" x:DeferLoadStrategy="Lazy" Visibility="Collapsed" Background="Transparent" Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                             <!-- Filter types -->
-                            <ListView ItemsSource="{Binding AlbumFilterTypes}" Grid.Row="0" SelectedItem="{Binding SelectedAlbumFilterType, Mode=TwoWay}"
+                        <!-- Filter types -->
+                        <ListView ItemsSource="{Binding AlbumFilterTypes}" Grid.Row="0" SelectedItem="{Binding SelectedAlbumFilterType, Mode=TwoWay}"
                                   Margin="0,0,0,0"
                                   ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Converter={StaticResource AlbumFilterTypeToStringConverter}}" FontSize="14" Margin="0,3,0,3"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource AlbumFilterTypeToStringConverter}}" FontSize="14" Margin="0,3,0,3"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                            <Rectangle Fill="{ThemeResource ApplicationForegroundThemeBrush}" Opacity="0.2" Height="1"
+                        <Rectangle Fill="{ThemeResource ApplicationForegroundThemeBrush}" Opacity="0.2" Height="1"
                                    Margin="10,10,10,10" Grid.Row="1"
                                    Visibility="{Binding Playlists, Converter={StaticResource IsEmptyToVisibilityConverter}}"/>
 
-                            <StackPanel Orientation="Horizontal" Margin="10,5,0,0" Grid.Row="2">
-                                <TextBlock Text="{Binding [Albums], Source={StaticResource Resources}, Converter={StaticResource StringToUpperConverter}}" 
+                        <StackPanel Orientation="Horizontal" Margin="10,5,0,0" Grid.Row="2">
+                            <TextBlock Text="{Binding [Albums], Source={StaticResource Resources}, Converter={StaticResource StringToUpperConverter}}" 
                                    Opacity="0.4" Typography.Capitals="SmallCaps" FontSize="11" FontWeight="Bold"/>
-                                <Button Content="+" Command="{Binding AddPlaylistCommand}" Style="{StaticResource SimpleButtonStyle}" FontSize="18" FontWeight="Bold" Opacity="0.4" Margin="5,-6,0,0"/>
-                            </StackPanel>
+                            <Button Content="+" Command="{Binding AddPlaylistCommand}" Style="{StaticResource SimpleButtonStyle}" FontSize="18" FontWeight="Bold" Opacity="0.4" Margin="5,-6,0,0"/>
+                        </StackPanel>
 
-                            <controls:LoadingIndicator IsBusy="{Binding Operations[playlists].IsWorking}" 
+                        <controls:LoadingIndicator IsBusy="{Binding Operations[playlists].IsWorking}" 
                                                    Error="{Binding Operations[playlists].Error}"
                                                    Grid.Row="3">
-                                <!-- Playlists -->
-                                <ListView x:Name="PlaylistsListView" Padding="0,0,0,0"
+                            <!-- Playlists -->
+                            <ListView x:Name="PlaylistsListView" Padding="0,0,0,0"
                                           ItemsSource="{Binding Playlists}" SelectedItem="{Binding SelectedAlbum, Mode=TwoWay}"
                                           ItemContainerStyle="{StaticResource PlaylistListViewItemStyle}">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Background="Transparent">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <interactivity:Interaction.Behaviors>
-                                                    <interactivity:BehaviorCollection>
-                                                        <behaviors:ContextMenuBehavior/>
-                                                    </interactivity:BehaviorCollection>
-                                                </interactivity:Interaction.Behaviors>
-                                                <Grid Width="30" Height="30" Background="{ThemeResource SystemControlHighlightListLowBrush}">
-                                                    <Image Source="{ThemeResource AlbumDefaultCover}" Stretch="Uniform" Height="15"/>
-                                                    <Image Source="{Binding Image}" Stretch="UniformToFill"/>
-                                                </Grid>
-                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
-                                                    <TextBlock Text="{Binding Title}" FontSize="14" TextTrimming="CharacterEllipsis"/>
-                                                    <TextBlock Text="{Binding TracksCount, Converter={StaticResource TracksUnitsStringConverter}}" FontSize="11" Opacity="0.6" FontWeight="SemiBold"
-                                                       Visibility="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource IsEmptyToVisibilityConverter}}"/>
-                                                </StackPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="Transparent">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <interactivity:Interaction.Behaviors>
+                                                <interactivity:BehaviorCollection>
+                                                    <behaviors:ContextMenuBehavior/>
+                                                </interactivity:BehaviorCollection>
+                                            </interactivity:Interaction.Behaviors>
+                                            <Grid Width="30" Height="30" Background="{ThemeResource SystemControlHighlightListLowBrush}">
+                                                <Image Source="{ThemeResource AlbumDefaultCover}" Stretch="Uniform" Height="15"/>
+                                                <Image Source="{Binding Image}" Stretch="UniformToFill"/>
                                             </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </controls:LoadingIndicator>
-                        </Grid>
-                    </toolkit:DropShadowPanel>
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                <TextBlock Text="{Binding Title}" FontSize="14" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Text="{Binding TracksCount, Converter={StaticResource TracksUnitsStringConverter}}" FontSize="11" Opacity="0.6" FontWeight="SemiBold"
+                                                       Visibility="{Binding Text, RelativeSource={RelativeSource Self}, Converter={StaticResource IsEmptyToVisibilityConverter}}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </controls:LoadingIndicator>
+                    </Grid>
                 </Grid>
             </PivotItem>
             <PivotItem>

@@ -33,7 +33,6 @@
                         <Setter Target="SettingsButton.Margin" Value="0,70,0,0" />
                         <Setter Target="SearchBox.Visibility" Value="Visible" />
                         <Setter Target="MiniPlayer.Visibility" Value="Visible" />
-                        <Setter Target="BackgroundArtOverlay.Visibility" Value="Collapsed" />
                         <Setter Target="BackgroundArt.Opacity" Value="0.2" />
                     </VisualState.Setters>
                 </VisualState>
@@ -54,7 +53,6 @@
                         <Setter Target="SidebarColumn.Width" Value="210" />
                         <Setter Target="SidebarBg.Opacity" Value="0.04"/>
                         <Setter Target="SettingsButton.Margin" Value="0,10,0,0" />
-                        <Setter Target="BackgroundArtOverlay.Visibility" Value="Visible" />
                         <Setter Target="BackgroundArt.Opacity" Value="0.3" />
                     </VisualState.Setters>
                 </VisualState>
@@ -73,14 +71,14 @@
             <Rectangle Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                        Opacity="0.82" Grid.ColumnSpan="3"/>
 
-            <Rectangle Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                       Opacity="0.7" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <!--<Rectangle Fill="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+                       Opacity="0.7" Grid.Column="1" Grid.ColumnSpan="2"/>-->
 
             <!-- Background art -->
-            <controls:ImageTransitionControl x:Name="BackgroundArt" Source="{Binding Player.ArtistImage.Source, Source={StaticResource Locator}}" Opacity="0.3" TransitionDuration="0:0:0.6"
-                                             Grid.Column="1"/>
+            <controls:ImageTransitionControl x:Name="BackgroundArt" Source="{Binding Player.TrackImage.Source, Source={StaticResource Locator}}" Opacity="0.3" TransitionDuration="0:0:0.6"
+                                             Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Grid x:Name="BackgroundArtOverlay"  Grid.Column="1">
+            <Grid x:Name="BackgroundArtOverlay" Grid.Column="1">
                 <Rectangle>
                     <Rectangle.Fill>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">

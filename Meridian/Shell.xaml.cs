@@ -39,6 +39,14 @@ namespace Meridian
 
         public double DefaultMenuWidth { get; } = 210;
 
+        public bool EnableBackgroundArt {
+            get { return BackgroundArt.Visibility != Visibility.Collapsed; }
+            set {
+                BackgroundArt.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+                BackgroundArtOverlay.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         public bool EnableBackgroundArtBlur
         {
             get { return BackgroundArtBlur.Visibility != Visibility.Collapsed; }
@@ -102,6 +110,7 @@ namespace Meridian
 
             SplitView.OpenPaneLength = DefaultMenuWidth;
 
+            EnableBackgroundArt = AppState.ShowArtistArt;
             EnableBackgroundArtBlur = AppState.EnableBackgroundBlur;
         }
 

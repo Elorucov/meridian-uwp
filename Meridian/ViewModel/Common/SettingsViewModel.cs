@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Globalization;
+using Windows.Storage;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 
@@ -23,6 +24,7 @@ namespace Meridian.ViewModel.Common
         private Locale _selectedLocale;
         private Theme _selectedTheme;
         private ColorScheme _selectedColor;
+        private bool _isAlbumCoversDeleted;
 
         private bool _isRestartRequired;
 
@@ -33,6 +35,8 @@ namespace Meridian.ViewModel.Common
         public DelegateCommand SignInLastFmCommand { get; private set; }
 
         public DelegateCommand SignOutLastFmCommand { get; private set; }
+
+        public DelegateCommand ClearAlbumCoversCommand { get; private set; }
 
         #endregion
 
@@ -121,6 +125,7 @@ namespace Meridian.ViewModel.Common
                     return;
 
                 AppState.ShowArtistArt = value;
+                IsRestartRequired = true;
                 if (!value)
                     EnableBackgroundBlur = false;
                 RaisePropertyChanged(nameof(EnableBackgroundArt));
@@ -219,6 +224,13 @@ namespace Meridian.ViewModel.Common
             }
         }
 
+        public bool IsAlbumCoversDeleted {
+            get { return _isAlbumCoversDeleted; }
+            private set {
+                Set(ref _isAlbumCoversDeleted, value);
+            }
+        }
+
         public SettingsViewModel()
         {
             var currentLanguage = ApplicationLanguages.PrimaryLanguageOverride;
@@ -230,21 +242,7 @@ namespace Meridian.ViewModel.Common
                 _selectedLocale = Locales.First();
 
             //theme
-            if (AppState.Theme != null)
-            {
-                switch (AppState.Theme)
-                {
-                    case ApplicationTheme.Light:
-                        _selectedTheme = Themes.First(t => t.Value == ElementTheme.Light);
-                        break;
-
-                    case ApplicationTheme.Dark:
-                        _selectedTheme = Themes.First(t => t.Value == ElementTheme.Dark);
-                        break;
-                }
-            }
-            else
-                _selectedTheme = Themes.First(t => t.Value == ElementTheme.Default);
+            _selectedTheme = Themes.First(t => t.Value == AppState.Theme);
 
             _selectedColor = ColorSchemes.FirstOrDefault(c => c.Name == AppState.Accent) ?? ColorSchemes.FirstOrDefault();
         }
@@ -270,26 +268,29 @@ namespace Meridian.ViewModel.Common
 
                 RaisePropertyChanged(nameof(LastFmSession));
             });
+
+            bool isDeleting = false;
+            ClearAlbumCoversCommand = new DelegateCommand(async () => {
+                if (isDeleting) return;
+                isDeleting = true;
+
+                IsAlbumCoversDeleted = false;
+                try {
+                    StorageFolder cache = await ApplicationData.Current.LocalFolder.GetFolderAsync("Cache");
+                    await cache.DeleteAsync();
+                    IsAlbumCoversDeleted = true;
+
+                } catch (Exception ex) {
+                    Logger.Error(ex, "Album covers cleanup failed.");
+                }
+                isDeleting = false;
+            });
         }
 
 
         private void ChangeTheme()
         {
-            switch (SelectedTheme.Value)
-            {
-                case ElementTheme.Default:
-                    AppState.Theme = null;
-                    break;
-
-                case ElementTheme.Light:
-                    AppState.Theme = ApplicationTheme.Light;
-                    break;
-
-                case ElementTheme.Dark:
-                    AppState.Theme = ApplicationTheme.Dark;
-                    break;
-            }
-
+            AppState.Theme = SelectedTheme.Value;
             Shell.Current.RequestedTheme = SelectedTheme.Value;
 
             Analytics.TrackEvent(AnalyticsEvent.SettingsChangeTheme, new Dictionary<string, object>

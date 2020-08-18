@@ -39,16 +39,13 @@ namespace Meridian
             this.InitializeComponent();
 
             Ioc.Setup();
-
-            if (AppState.Theme != null)
-                RequestedTheme = AppState.Theme.Value;
         }
 
         public override async void OnStart(StartKind startKind, IActivatedEventArgs args)
         {
             Logger.AppStart();
 
-            TimeBombHelper.Initialize();
+            // TimeBombHelper.Initialize();
 
             DispatcherHelper.Initialize();
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
@@ -58,6 +55,7 @@ namespace Meridian
                 var appView = ApplicationView.GetForCurrentView();
                 appView.TitleBar.ButtonBackgroundColor = Colors.Transparent;
                 appView.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+                appView.SetPreferredMinSize(new Windows.Foundation.Size(360, 500));
             }
 
             await AudioService.Instance.LoadState();
@@ -130,6 +128,8 @@ namespace Meridian
             navigationService.IsBackButtonEnabled = false;
             WindowWrapper.Current().NavigationService = navigationService;
             Window.Current.Content = shell;
+
+            if (AppState.Theme != null) shell.RequestedTheme = AppState.Theme.Value;
         }
     }
 }

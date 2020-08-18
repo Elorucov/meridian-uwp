@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -15,6 +16,14 @@ namespace Meridian.Services
     {
         public const string CachePath = "Cache";
         public const string ImageCachePath = CachePath + "\\Image";
+
+        public async Task<RandomAccessStreamReference> ConvertToRandomAccessStream(MemoryStream memoryStream) {
+            var randomAccessStream = new InMemoryRandomAccessStream();
+            var outputStream = randomAccessStream.GetOutputStreamAt(0);
+            await RandomAccessStream.CopyAndCloseAsync(memoryStream.AsInputStream(), outputStream);
+            var result = RandomAccessStreamReference.CreateFromStream(randomAccessStream);
+            return result;
+        }
 
         public async Task<CachedImage> CacheImageFromUri(Uri sourceUri, string key, int optimalImageWidth = 0)
         {
@@ -73,7 +82,7 @@ namespace Meridian.Services
             return null;
         }
 
-        public async Task<Stream> GetCachedImageStream(string key)
+        public async Task<MemoryStream> GetCachedImageStream(string key)
         {
             if (!IsFileCached(key, ImageCachePath))
                 return null;

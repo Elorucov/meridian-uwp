@@ -290,6 +290,9 @@ namespace Meridian.ViewModel.VK
                 if (withoutPlaylistOnly)
                     tracks = tracks?.Where(t => t.PlaylistId == 0).ToList();
 
+                // Remove unavailable tracks
+                tracks = tracks?.Where(t => t.Source != null).ToList();
+
                 if (Tracks != null)
                     Tracks.CollectionChanged -= Tracks_CollectionChanged;
 

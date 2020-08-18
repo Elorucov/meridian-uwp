@@ -385,7 +385,7 @@
     <value>VK</value>
   </data>
   <data name="Settings_EnabledBackgroundArt" xml:space="preserve">
-    <value>Show artist image on background</value>
+    <value>Show album image on background</value>
   </data>
   <data name="Settings_EnabledBackgroundBlur" xml:space="preserve">
     <value>Enable background blur</value>
@@ -530,5 +530,8 @@
   </data>
   <data name="Yesterday" xml:space="preserve">
     <value>yesterday</value>
+  </data>
+  <data name="Settings_ClearAlbumCovers" xml:space="preserve">
+    <value>Clear album cover cache</value>
   </data>
 </root>

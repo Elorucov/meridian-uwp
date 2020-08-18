@@ -11,9 +11,10 @@
     d:DesignWidth="400"
     x:Name="rootElement"
     FontSize="14"
+    Background="Transparent"
     Tapped="TrackControl_OnTapped">
 
-    <Grid x:Name="LayoutRoot" Padding="15,11,15,11" Background="Transparent">
+    <Grid x:Name="Root">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="NormalStates">
                 <VisualState x:Name="Compact">
@@ -21,6 +22,8 @@
                         <AdaptiveTrigger MinWindowWidth="0" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="Cover.Width" Value="40" />
+                        <Setter Target="Cover.Height" Value="40" />
                         <Setter Target="ArtistColumn.Width" Value="0" />
                         <Setter Target="ArtistTextBlock.(Grid.Column)" Value="0" />
                         <Setter Target="ArtistTextBlock.Margin" Value="0,19,10,0" />
@@ -31,6 +34,8 @@
                         <AdaptiveTrigger MinWindowWidth="600" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="Cover.Width" Value="32" />
+                        <Setter Target="Cover.Height" Value="32" />
                         <Setter Target="ArtistColumn.Width" Value="0.3*" />
                         <Setter Target="ArtistTextBlock.(Grid.Column)" Value="1" />
                         <Setter Target="ArtistTextBlock.Margin" Value="0,0,10,0" />
@@ -44,20 +49,30 @@
             </interactivity:BehaviorCollection>
         </interactivity:Interaction.Behaviors>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="0.3*" x:Name="ArtistColumn"/>
-            <ColumnDefinition Width="0.2*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <Grid x:Name="Cover" Background="White" CornerRadius="2" Width="32" Height="32" Margin="10,5">
+            <Image Stretch="Uniform" Margin="4" Source="ms-appx:///Resources/Images/Login/Logo.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Image Stretch="UniformToFill" Source="{Binding Track.AlbumCover, ElementName=rootElement}"/>
+        </Grid>
+        <Grid x:Name="LayoutRoot" Grid.Column="1" Padding="5,11,15,11" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.45*"/>
+                <ColumnDefinition Width="0.55*" x:Name="ArtistColumn"/>
+                <ColumnDefinition Width="64"/>
+            </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="TitleTextBlock" x:FieldModifier="private" Text="{Binding Track.Title, ElementName=rootElement}" Margin="0,0,10,0" TextTrimming="CharacterEllipsis"
+            <TextBlock x:Name="TitleTextBlock" x:FieldModifier="private" Text="{Binding Track.Title, ElementName=rootElement}" Margin="0,0,10,0" TextTrimming="CharacterEllipsis"
                    MaxLines="1"
                    Opacity="0.8" ToolTipService.ToolTip="{Binding Track.Title, ElementName=rootElement}"/>
 
-        <TextBlock x:Name="ArtistTextBlock" x:FieldModifier="private" Grid.Column="1" Text="{Binding Track.Artist, ElementName=rootElement}" Margin="0,0,10,0" HorizontalAlignment="Stretch" TextAlignment="Left" TextTrimming="CharacterEllipsis"
+            <TextBlock x:Name="ArtistTextBlock" x:FieldModifier="private" Grid.Column="1" Text="{Binding Track.Artist, ElementName=rootElement}" Margin="0,0,10,0" HorizontalAlignment="Stretch" TextAlignment="Left" TextTrimming="CharacterEllipsis"
                    MaxLines="1"
                    Opacity="0.5" ToolTipService.ToolTip="{Binding Track.Artist, ElementName=rootElement}"/>
-        
-        <TextBlock x:Name="DurationTextBlock" x:FieldModifier="private" Grid.Column="2" Text="{Binding Track.Duration, ElementName=rootElement, Converter={StaticResource AudioTimeSpanConverter}}" HorizontalAlignment="Right"
+
+            <TextBlock x:Name="DurationTextBlock" x:FieldModifier="private" Grid.Column="2" Text="{Binding Track.Duration, ElementName=rootElement, Converter={StaticResource AudioTimeSpanConverter}}" HorizontalAlignment="Right"
                    Opacity="0.5" Margin="0,0,0,0"/>
+        </Grid>
     </Grid>
 </UserControl>

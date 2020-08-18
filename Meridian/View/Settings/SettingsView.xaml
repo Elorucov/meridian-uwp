@@ -72,7 +72,18 @@
                 
                 <ToggleSwitch Header="{Binding [Settings_EnabledBackgroundBlur], Source={StaticResource Resources}}" Margin="0,20,0,0"
                               IsOn="{Binding EnableBackgroundBlur, Mode=TwoWay}" IsEnabled="{Binding EnableBackgroundArt}"/>
-                
+
+                <Grid Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="{Binding [Settings_ClearAlbumCovers], Source={StaticResource Resources}}" 
+                                Margin="0,5,0,0" FontSize="14" Padding="12,3" MinHeight="0"
+                                Command="{Binding ClearAlbumCoversCommand}" Style="{StaticResource CommonButtonStyle}"/>
+                    <SymbolIcon Grid.Column="1" HorizontalAlignment="Left" Width="16" Height="16" VerticalAlignment="Center" Margin="8,0" Visibility="{Binding IsAlbumCoversDeleted}" Symbol="Accept"/>
+                </Grid>
+
                 <!-- Accounts -->
 
                 <TextBlock Text="{Binding [Settings_AccountsTitle], Source={StaticResource Resources}}" Style="{StaticResource HeaderTextBlockStyle}"
@@ -139,6 +150,9 @@
                    <Run Text="{Binding Version}"/>
                 </TextBlock>
                 <TextBlock FontSize="14" Opacity="0.6" Text="Copyright © Artem Shuba 2011 ― 2020" FontWeight="Normal"/>
+                <TextBlock FontSize="14" Opacity="0.6" FontWeight="Normal">
+                    <Hyperlink NavigateUri="https://github.com/Elorucov/meridian-uwp">ELOR's</Hyperlink> branch
+                </TextBlock>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -23,9 +23,9 @@ namespace Meridian
         /// <summary>
         /// Theme
         /// </summary>
-        public static ApplicationTheme? Theme
+        public static ElementTheme? Theme
         {
-            get { return SettingsService.Roaming.Get<ApplicationTheme>(); }
+            get { return SettingsService.Roaming.Get<ElementTheme>(); }
             set { SettingsService.Roaming.Set(value); }
         }
 
