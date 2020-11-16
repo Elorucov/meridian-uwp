@@ -525,4 +525,7 @@
   <data name="Settings_ClearAlbumCovers" xml:space="preserve">
     <value>Очистить кэш обложек</value>
   </data>
+  <data name="ContextMenu_DownloadLink" xml:space="preserve">
+    <value>Ссылка для загрузки</value>
+  </data>
 </root>

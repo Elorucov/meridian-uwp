@@ -19,11 +19,8 @@ using Jupiter.Mvvm;
 using Meridian.View.VK;
 using Meridian.Controls;
 using Meridian.View.Compact.Vk;
-using Meridian.Utils.Helpers;
-using Windows.UI.Xaml.Controls;
 
-namespace Meridian.ViewModel.VK
-{
+namespace Meridian.ViewModel.VK {
     public class MyMusicViewModel : TracksViewModelBase
     {
         private IncrementalLoadingCollection<IPlaylist> _playlists;
@@ -283,7 +280,7 @@ namespace Meridian.ViewModel.VK
             try
             {
                 var albumId = playlistId != null ? long.Parse(playlistId) : 0;
-                var tracks = await _tracksService.GetTracks(albumId: albumId);
+                var tracks = await _tracksService.GetTracks(albumId: albumId, count: 5000); // Now VK returns only 200 songs without count parameter.
                 if (tracks == null)
                     return;
 

@@ -15,6 +15,7 @@ using VkLib.Core.Users;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.System;
 using System.Linq;
+using Windows.UI.Xaml.Controls;
 
 namespace Meridian.ViewModel
 {
@@ -121,6 +122,11 @@ namespace Meridian.ViewModel
         /// Add track to playlist command
         /// </summary>
         public DelegateCommand<AudioVk> AddTrackToPlaylistCommand { get; private set; }
+
+        /// <summary>
+        /// Show download link command
+        /// </summary>
+        public DelegateCommand<AudioVk> ShowDownloadLinkCommand { get; private set; }
 
         #endregion
 
@@ -264,6 +270,19 @@ namespace Meridian.ViewModel
                 {
                     Logger.Error(ex, "Unable to follow playlist");
                 }
+            });
+
+            ShowDownloadLinkCommand = new DelegateCommand<AudioVk>(async track => {
+                ContentDialog dialog = new ContentDialog() {
+                    Title = Meridian.Utils.Helpers.Resources.GetStringByKey("ContextMenu_DownloadLink"),
+                    PrimaryButtonText = Meridian.Utils.Helpers.Resources.GetStringByKey("Close")
+                };
+                dialog.Content = new TextBox { 
+                    Text = track.Source.ToString(),
+                    TextWrapping = Windows.UI.Xaml.TextWrapping.Wrap,
+                    IsReadOnly = true,
+                };
+                await dialog.ShowAsync();
             });
         }
 

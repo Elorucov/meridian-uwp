@@ -59,6 +59,12 @@ namespace Meridian.Utils.Helpers
             menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_FindMore"), Command = ViewModelLocator.Main.FindMoreForTrackCommand, CommandParameter = track });
             menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_CopyTitle"), Command = ViewModelLocator.Main.CopyTrackTitleCommand, CommandParameter = track });
 
+            if (!(menu.Items?.LastOrDefault() is MenuFlyoutSeparator))
+                menu.Items?.Add(new MenuFlyoutSeparator());
+
+            if (track is AudioVk)
+                menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_DownloadLink"), Command = ViewModelLocator.Main.ShowDownloadLinkCommand, CommandParameter = track });
+
             return menu;
         }
 

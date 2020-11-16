@@ -534,4 +534,7 @@
   <data name="Settings_ClearAlbumCovers" xml:space="preserve">
     <value>Clear album cover cache</value>
   </data>
+  <data name="ContextMenu_DownloadLink" xml:space="preserve">
+    <value>Download link</value>
+  </data>
 </root>
