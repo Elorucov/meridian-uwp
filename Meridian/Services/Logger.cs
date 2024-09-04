@@ -5,7 +5,6 @@ using Microsoft.HockeyApp;
 using System;
 using System.Diagnostics;
 using Windows.UI.Xaml;
-using Yandex.Metrica;
 
 namespace Meridian.Services
 {
@@ -23,8 +22,6 @@ namespace Meridian.Services
 
         public static void AppStart()
         {
-            YandexMetrica.Activate("567e94f7-257a-4c7a-b0aa-d1c8dc73d8c9");
-
             _logger.Info("App started. v" + AppInfoHelper.GetAppVersionString());
         }
 
@@ -42,8 +39,6 @@ namespace Meridian.Services
 
             Debug.WriteLine(message + "\r\n" + ex);
 
-            YandexMetrica.ReportError(message, ex);
-
             HockeyClient.Current.TrackException(ex);
 
             _logger.Error(message, ex);
@@ -52,8 +47,6 @@ namespace Meridian.Services
         public static void Fatal(Exception ex, string message)
         {
             Debug.WriteLine("Fatal error: " + message + "\r\n" + ex);
-
-            YandexMetrica.ReportUnhandledException(ex);
 
             HockeyClient.Current.TrackException(ex);
 

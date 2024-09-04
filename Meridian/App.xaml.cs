@@ -21,7 +21,6 @@ using System.Globalization;
 using Meridian.Utils.Helpers;
 using Windows.UI.Popups;
 using Windows.System;
-using LastFmLib;
 
 namespace Meridian
 {
@@ -63,9 +62,6 @@ namespace Meridian
             var vk = SimpleIoc.Default.GetInstance<Vk>();
             vk.Language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 
-            var lastFm = Ioc.Resolve<LastFm>();
-            lastFm.SessionKey = AppState.LastFmSession?.Key;
-
             if (AppState.VkToken == null || AppState.VkToken.HasExpired)
             {
                 NavigationService.Navigate(typeof(LoginView));
@@ -76,10 +72,7 @@ namespace Meridian
                 vk.AccessToken = AppState.VkToken;
                 Messenger.Default.Send(new MessageUserAuthChanged { IsLoggedIn = true });
 
-                if (AppState.StartPage == StartPage.Mymusic)
-                    NavigationService.Navigate(typeof(MyMusicView));
-                else
-                    NavigationService.Navigate(typeof(ExploreView));
+                NavigationService.Navigate(typeof(MyMusicView));
             }
 
             //if (TimeBombHelper.HasExpired())

@@ -56,8 +56,8 @@ namespace Meridian.Utils.Helpers
             if (!(menu.Items?.LastOrDefault() is MenuFlyoutSeparator))
                 menu.Items?.Add(new MenuFlyoutSeparator());
 
-            menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_FindMore"), Command = ViewModelLocator.Main.FindMoreForTrackCommand, CommandParameter = track });
-            menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_CopyTitle"), Command = ViewModelLocator.Main.CopyTrackTitleCommand, CommandParameter = track });
+            //menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_FindMore"), Command = ViewModelLocator.Main.FindMoreForTrackCommand, CommandParameter = track });
+            //menu.Items?.Add(new MenuFlyoutItem() { Text = Resources.GetStringByKey("ContextMenu_CopyTitle"), Command = ViewModelLocator.Main.CopyTrackTitleCommand, CommandParameter = track });
 
             if (!(menu.Items?.LastOrDefault() is MenuFlyoutSeparator))
                 menu.Items?.Add(new MenuFlyoutSeparator());

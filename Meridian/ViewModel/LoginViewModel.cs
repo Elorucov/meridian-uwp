@@ -8,6 +8,9 @@ using Meridian.View;
 using Meridian.View.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using VkLib;
 using VkLib.Auth;
@@ -15,6 +18,11 @@ using VkLib.Core.Users;
 using VkLib.Error;
 using Windows.Security.Authentication.Web;
 using Windows.System;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml;
+using Windows.UI;
+using VkLib.Core.Auth;
 
 namespace Meridian.ViewModel
 {
@@ -137,10 +145,7 @@ namespace Meridian.ViewModel
 
             LoginCommand = new DelegateCommand(DoLogin);
 
-            SignUpCommand = new DelegateCommand(async () =>
-            {
-                await Launcher.LaunchUriAsync(new Uri("https://vk.com"));
-            });
+            SignUpCommand = new DelegateCommand(OpenLoginByTokenDialog);
         }
 
         private async void DoLogin()
@@ -233,15 +238,92 @@ namespace Meridian.ViewModel
 
             await _vk.Execute.GetBaseData(_vk.LoginParams);*/
 
-            User = await _vk.Users.Get(userId: _vk.AccessToken.UserId, fields: "photo,photo_100");
+            if (User == null) User = await _vk.Users.Get(userId: _vk.AccessToken.UserId, fields: "photo,photo_100");
 
             WelcomeText = string.Format(Resources.GetStringByKey("Login_Welcome"), User.FirstName);
 
             Messenger.Default.Send(new MessageUserAuthChanged { IsLoggedIn = true });
 
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
-            NavigationService.Navigate(typeof(ExploreView), clearHistory: true);
+            NavigationService.Navigate(typeof(MyMusicView), clearHistory: true);
+        }
+
+        private async void OpenLoginByTokenDialog() {
+            StackPanel content = new StackPanel();
+
+            PasswordBox at = new PasswordBox {
+                Margin = new Thickness(0, 0, 0, 12)
+            };
+
+            TextBlock err = new TextBlock {
+                Foreground = new SolidColorBrush(Colors.Red),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            content.Children.Add(new TextBlock { TextWrapping = TextWrapping.Wrap, Text = "Введите access token от официального приложения ВК (мобильные клиенты либо десктопный VK Мессенджер)." });
+            content.Children.Add(at);
+            content.Children.Add(err);
+
+            ContentDialog dlg = new ContentDialog {
+                Title = "Auth with token",
+                PrimaryButtonText = "Auth",
+                SecondaryButtonText = "Cancel",
+                DefaultButton = ContentDialogButton.Primary,
+                Content = content
+            };
+
+            dlg.PrimaryButtonClick += async (a, b) => {
+                b.Cancel = true;
+                dlg.IsPrimaryButtonEnabled = false;
+                dlg.IsSecondaryButtonEnabled = false;
+                User = await CheckTokenAsync(at.Password, err);
+                if (User != null) {
+                    dlg.Hide();
+
+                    VkAccessToken token = new VkAccessToken {
+                        UserId = User.Id,
+                        Token = at.Password,
+                        ExpiresIn = DateTime.MaxValue
+                    };
+
+                    _vk.AccessToken = token;
+                    AppState.VkToken = token;
+
+                    await OnLogin();
+                } else {
+                    _vk.AccessToken = null;
+                    dlg.IsPrimaryButtonEnabled = true;
+                    dlg.IsSecondaryButtonEnabled = true;
+                }
+            };
+
+            await dlg.ShowAsync();
+        }
+
+        private async Task<VkProfile> CheckTokenAsync(string token, TextBlock err) {
+            try {
+                err.Text = "Checking access to audio API...";
+
+                VkAccessToken at = new VkAccessToken {
+                    Token = token
+                };
+
+                _vk.AccessToken = at;
+
+                var user = await _vk.Users.Get(fields: "photo,photo_100");
+                var result = await _vk.Audio.Get(user.Id, count: 1);
+                return user;
+            } catch (VkInvalidTokenException vktex) {
+                err.Text = $"Invalid token!";
+                return null;
+            } catch (VkException vkex) {
+                err.Text = $"VK API Error: {vkex.Error}";
+                return null;
+            } catch (Exception ex) {
+                err.Text = $"Exception (0x{ex.HResult.ToString("x8")}): {ex.Message}";
+                return null;
+            }
         }
     }
 }

@@ -13,16 +13,12 @@ namespace Meridian.Services
 {
     public class ImageService
     {
-        private IImageResolver _lastFmImageResolver;
-
         private CacheService _cacheService;
 
         public static CachedImage DefaultTrackCover = new CachedImage { Key = "default", Source = new BitmapImage(new Uri("ms-appx:///Resources/Images/Player/DefaultCover-Light.png")) };
 
         public ImageService()
         {
-            _lastFmImageResolver = new LastFmImageResolver();
-
             _cacheService = Ioc.Resolve<CacheService>();
         }
 
@@ -142,20 +138,6 @@ namespace Meridian.Services
             {
                 Logger.Error(ex, "Unable to update transport image");
             }
-        }
-
-        private async Task<Uri> ResolveAlbumCoverUri(string artist, string title)
-        {
-            var uri = await _lastFmImageResolver.GetAlbumCover(artist, title);
-
-            return uri;
-        }
-
-        private async Task<Uri> ResolveArtistImageUri(string artist, bool big = true)
-        {
-            var uri = await _lastFmImageResolver.GetArtistImageUri(artist, big);
-
-            return uri;
         }
 
         private async Task<Stream> ResizeImage(Stream inputStream, int width, int height)

@@ -2,7 +2,6 @@
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.Foundation.Metadata;
 
 namespace Meridian.Controls
 {
@@ -12,14 +11,8 @@ namespace Meridian.Controls
         public static readonly DependencyProperty AppViewForegroundProperty =
             DependencyProperty.Register("AppViewForeground", typeof(Brush), typeof(AppViewHelperControl), new PropertyMetadata(null, (d, e) =>
             {
-                var appView = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
+                var appView = ApplicationView.GetForCurrentView();
                 appView.TitleBar.ButtonForegroundColor = ((SolidColorBrush)e.NewValue).Color;
-
-                if (ApiInformation.IsTypePresent(typeof(StatusBar).FullName))
-                {
-                    var statusBar = StatusBar.GetForCurrentView();
-                    statusBar.ForegroundColor = ((SolidColorBrush)e.NewValue).Color;
-                }
             }));
 
         /// <summary>
@@ -35,12 +28,8 @@ namespace Meridian.Controls
         public static readonly DependencyProperty AppViewBackgroundProperty =
             DependencyProperty.Register("AppViewBackground", typeof(Brush), typeof(AppViewHelperControl), new PropertyMetadata(null, (d, e) =>
             {
-                if (ApiInformation.IsTypePresent(typeof(StatusBar).FullName))
-                {
-                    var statusBar = StatusBar.GetForCurrentView();
-                    statusBar.BackgroundColor = ((SolidColorBrush)e.NewValue).Color;
-                    statusBar.BackgroundOpacity = 1;
-                }
+                var appView = ApplicationView.GetForCurrentView();
+                appView.TitleBar.ButtonBackgroundColor = ((SolidColorBrush)e.NewValue).Color;
             }));
 
         /// <summary>

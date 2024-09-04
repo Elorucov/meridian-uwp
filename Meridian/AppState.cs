@@ -1,5 +1,4 @@
 ﻿using Jupiter.Services.Settings;
-using LastFmLib.Core.Auth;
 using Meridian.Enum;
 using VkLib.Core.Auth;
 using Windows.UI.Xaml;
@@ -44,15 +43,6 @@ namespace Meridian
         public static StartPage StartPage
         {
             get { return SettingsService.Roaming.Get<StartPage>(); }
-            set { SettingsService.Roaming.Set(value); }
-        }
-
-        /// <summary>
-        /// Last.FM session
-        /// </summary>
-        public static LastFmAuthResult LastFmSession
-        {
-            get { return SettingsService.Roaming.Get<LastFmAuthResult>(); }
             set { SettingsService.Roaming.Set(value); }
         }
 
@@ -127,7 +117,6 @@ namespace Meridian
         public static void Reset()
         {
             VkToken = null;
-            LastFmSession = null;
             EnableScrobbling = false;
             EnableStatusBroadcasting = false;
             Shuffle = false;

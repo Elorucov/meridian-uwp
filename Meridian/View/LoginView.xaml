@@ -555,7 +555,7 @@
                 <Button Style="{StaticResource SimpleButtonStyle}" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" Margin="0,30,0,0"
                         FontSize="12" FontWeight="Normal" HorizontalContentAlignment="Center" Command="{Binding SignUpCommand}"
                         Visibility="{Binding IsLoginStartVisible, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Text="{Binding [Login_SignUpVk], Source={StaticResource Resources}}"/>
+                    <TextBlock Text="Login via access_token"/>
                 </Button>
             </StackPanel>
         </Grid>

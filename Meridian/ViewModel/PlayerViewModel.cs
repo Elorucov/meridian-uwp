@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Messaging;
 using Meridian.Utils.Messaging;
 using Meridian.Model;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace Meridian.ViewModel
 {
@@ -220,33 +219,6 @@ namespace Meridian.ViewModel
                     {
                         Logger.Error(ex, "Unable to update VK status");
                     }
-                }
-
-                if (AppState.EnableScrobbling && !_lastFmNowPlayingUpdated)
-                {
-                    _lastFmNowPlayingUpdated = true;
-                    try
-                    {
-                        _scrobblingService.UpdateNowPlaying(CurrentAudio).ContinueWith(t => { });
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Error(ex, "Unable to update now playing on Last.FM");
-                    }
-                }
-            }
-
-            if (AppState.EnableScrobbling && !_lastFmScrobbled && position.TotalSeconds >= CurrentAudio.Duration.TotalSeconds / 3)
-            {
-                _lastFmScrobbled = true;
-
-                try
-                {
-                    _scrobblingService.Scrobble(CurrentAudio).ContinueWith(t => { });
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex, "Unable to scrobble track to Last.FM");
                 }
             }
         }

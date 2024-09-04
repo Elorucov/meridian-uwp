@@ -62,7 +62,7 @@ namespace Meridian
             {
                 Items = new List<MenuItem>()
                 {
-                    new MenuItem() { Page = typeof(ExploreView), Title = Utils.Helpers.Resources.GetStringByKey("Main_MenuItemExplore") },
+                    // new MenuItem() { Page = typeof(ExploreView), Title = Utils.Helpers.Resources.GetStringByKey("Main_MenuItemExplore") },
                     new MenuItem() { Page = typeof(NowPlayingView), Title = Utils.Helpers.Resources.GetStringByKey("Main_MenuItemNowPlaying") }
                 }
             },

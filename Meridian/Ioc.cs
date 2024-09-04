@@ -1,10 +1,8 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
-using LastFmLib;
 using Meridian.Services.VK;
 using System.IO;
 using VkLib;
 using Windows.Storage;
-using DeezerLib;
 using Meridian.Services;
 using Meridian.Services.Discovery;
 
@@ -16,10 +14,8 @@ namespace Meridian
 
         public static void Setup()
         {
-            //using official VK app for Android appId and secret
-            SimpleIoc.Default.Register(() => new Vk(appId: "2274003", clientSecret: "hHbZxrka2uZ6jB1inYsH", apiVersion: "5.91", userAgent: "VKAndroidApp/5.52-4543 (Android 5.1.1; SDK 22; x86_64; unknown Android SDK built for x86_64; en; 320x240)"));
-            SimpleIoc.Default.Register(() => new LastFm(apiKey: "a012acc1e5f8a61bc7e58238ce3021d8", apiSecret: "86776d4f43a72633fb37fb28713a7798"));
-            SimpleIoc.Default.Register(() => new Deezer(appId: "229622", secretKey: "da90d8606bf99c8e1b403a80e03aefa3"));
+            //using official VK app for VKMessenger appId and secret (because audio API for this app is available and returns mp3)
+            SimpleIoc.Default.Register(() => new Vk(appId: "51453752", clientSecret: "4UyuCUsdK8pVCNoeQuGi", apiVersion: "5.91", userAgent: "com.vk.vkclient/5709 (unknown, iOS 14.6, iPhone9,1, Scale/2.0)"));
 
             SimpleIoc.Default.Register<VkTracksService>();
             SimpleIoc.Default.Register<VkUserService>();

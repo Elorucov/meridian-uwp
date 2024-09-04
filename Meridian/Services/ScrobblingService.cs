@@ -1,5 +1,4 @@
-﻿using LastFmLib;
-using Meridian.Interfaces;
+﻿using Meridian.Interfaces;
 using Meridian.Model;
 using Meridian.Utils.Helpers;
 using System;
@@ -10,12 +9,10 @@ namespace Meridian.Services
 {
     public class ScrobblingService
     {
-        private LastFm _lastFm;
         private Vk _vk;
 
-        public ScrobblingService(Vk vk, LastFm lastFm)
+        public ScrobblingService(Vk vk)
         {
-            _lastFm = lastFm;
             _vk = vk;
         }
 
@@ -30,22 +27,6 @@ namespace Meridian.Services
             }
 
             var result = await _vk.Audio.SetBroadcast(aid, oid);
-        }
-
-        public async Task<bool> Scrobble(IAudio audio)
-        {
-            var time = (int)DateTimeHelper.ToUnixTime(DateTime.Now);
-
-            await _lastFm.Track.Scrobble(audio.Artist, audio.Title, time.ToString(), null, (int)audio.Duration.TotalSeconds);
-
-            return true;
-        }
-
-        public async Task<bool> UpdateNowPlaying(IAudio audio)
-        {
-            await _lastFm.Track.UpdateNowPlaying(audio.Artist, audio.Title, null, (int)audio.Duration.TotalSeconds);
-
-            return true;
         }
     }
 }

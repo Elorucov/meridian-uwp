@@ -1,7 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using Jupiter.Mvvm;
 using Jupiter.Utils.Helpers;
-using LastFmLib.Core.Auth;
 using Meridian.Controls;
 using Meridian.Enum;
 using Meridian.Model;
@@ -192,11 +191,6 @@ namespace Meridian.ViewModel.Common
             get { return TimeBombHelper.ExpireDate.ToString("d"); }
         }
 
-        public LastFmAuthResult LastFmSession
-        {
-            get { return AppState.LastFmSession; }
-        }
-
         public bool EnableStatusBroadcasting
         {
             get { return AppState.EnableStatusBroadcasting; }
@@ -254,19 +248,6 @@ namespace Meridian.ViewModel.Common
                 Messenger.Default.Send(new MessageUserAuthChanged { IsLoggedIn = false });
 
                 Analytics.TrackEvent(AnalyticsEvent.SignOutVk);
-            });
-
-            SignInLastFmCommand = new DelegateCommand(async () =>
-            {
-                await PopupControl.Show<LastFmLoginView>();
-                RaisePropertyChanged(nameof(LastFmSession));
-            });
-
-            SignOutLastFmCommand = new DelegateCommand(() =>
-            {
-                AppState.LastFmSession = null;
-
-                RaisePropertyChanged(nameof(LastFmSession));
             });
 
             bool isDeleting = false;
